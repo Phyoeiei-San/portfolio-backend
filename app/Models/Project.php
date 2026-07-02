@@ -16,5 +16,8 @@ class Project extends Model
     'live_demo',
     'tech_stack',
 ];
+protected $casts = [
+    'tech_stack' => 'array',
+];
 
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -29,6 +30,9 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         $validated = $request->validated();
+        if (isset($validated['tech_stack'])) {
+            $validated['tech_stack'] = json_encode($validated['tech_stack']);
+        }
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('projects', 'public');
@@ -62,11 +66,19 @@ class ProjectController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('projects', 'public');
+            // Delete old image
+            if (
+                $project->image &&
+                Storage::disk('public')->exists($project->image)
+            ) {
+                Storage::disk('public')->delete($project->image);
+            }
+            // Upload new image
+            $validated['image'] = $request
+                ->file('image')
+                ->store('projects', 'public');
         }
-
         $project->update($validated);
-
         return new ProjectResource($project);
     }
 
@@ -76,9 +88,18 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        Project::destroy($id);
-        return response()->json(['message' => 'Deleted']);
+        if (
+            $project->image &&
+            Storage::disk('public')->exists($project->image)
+        ) {
+
+            Storage::disk('public')->delete($project->image);
+        }
+        $project->delete();
+        return response()->json([
+            'message' => 'Project deleted successfully.'
+        ]);
     }
 }
