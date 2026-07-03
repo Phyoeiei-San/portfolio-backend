@@ -16,9 +16,20 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    // public function index()
+    // {
+    //     return ProjectResource::collection(Project::latest()->paginate(10));
+    // }
+    public function index(Request $request)
     {
-        return ProjectResource::collection(Project::latest()->paginate(10));
+        $query = Project::query();
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        }
+        $projects = $query->latest()->get();
+        return ProjectResource::collection($projects);
     }
 
     /**
