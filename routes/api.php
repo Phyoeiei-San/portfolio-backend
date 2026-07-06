@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\ProjectController;
 use Illuminate\Http\Request;
@@ -25,10 +26,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/messages', [MessageController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/projects', [ProjectController::class, 'store']);
-    Route::put('/projects/{id}', [ProjectController::class, 'update']);
-    Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
+    Route::put('/projects/{project}', [ProjectController::class, 'update']);
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
 });
 Route::get('/projects/featured', [ProjectController::class, 'featured']);
 Route::apiResource('projects', ProjectController::class)->only(['index', 'show']);
