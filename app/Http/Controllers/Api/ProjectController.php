@@ -28,7 +28,9 @@ class ProjectController extends Controller
             $query->where('title', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%");
         }
-        $projects = $query->latest()->get();
+        // $perPage = $request->integer('per_page', 10);
+        $perPage = min($request->integer('per_page', 10), 50);
+        $projects = $query->latest()->paginate($perPage);
         return ProjectResource::collection($projects);
     }
 
