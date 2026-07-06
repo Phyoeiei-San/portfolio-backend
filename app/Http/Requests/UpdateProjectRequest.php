@@ -30,6 +30,7 @@ class UpdateProjectRequest extends FormRequest
         'github_link' => 'nullable|url',
         'live_demo' => 'nullable|url',
         'tech_stack' => 'nullable|array',
+        'featured' => 'sometimes|boolean',
         ];
     }
 }

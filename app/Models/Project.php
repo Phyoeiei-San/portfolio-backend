@@ -15,9 +15,11 @@ class Project extends Model
     'github_link',
     'live_demo',
     'tech_stack',
+    'featured',
 ];
 protected $casts = [
     'tech_stack' => 'array',
+    'featured' => 'boolean',
 ];
 
 }

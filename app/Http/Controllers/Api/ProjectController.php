@@ -115,4 +115,9 @@ class ProjectController extends Controller
             'message' => 'Project deleted successfully.'
         ]);
     }
+    public function featured()
+    {
+        $projects = Project::where('featured', true)->latest()->take(6)->get();
+        return ProjectResource::collection($projects);
+    }
 }

@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/projects/{id}', [ProjectController::class, 'update']);
     Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
 });
-
+Route::get('/projects/featured', [ProjectController::class, 'featured']);
 Route::apiResource('projects', ProjectController::class)->only(['index', 'show']);
 
 // Route::get('/projects', [ProjectController::class, 'index']);
