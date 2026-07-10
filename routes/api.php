@@ -34,5 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::get('/projects/featured', [ProjectController::class, 'featured']);
 Route::apiResource('projects', ProjectController::class)->only(['index', 'show']);
+Route::get('/projects/{project}', [ProjectController::class, 'detail']);
+
 
 // Route::get('/projects', [ProjectController::class, 'index']);

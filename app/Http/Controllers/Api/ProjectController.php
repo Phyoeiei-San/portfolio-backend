@@ -66,6 +66,13 @@ class ProjectController extends Controller
     {
         return Project::findOrFail($id);
     }
+    public function detail(Project $project)
+    {
+        return response()->json([
+            'data' => $project
+        ]);
+    }
+
 
     /**
      * Update the specified resource in storage.
